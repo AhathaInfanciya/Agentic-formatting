@@ -16,4 +16,4 @@ Responsibilities::
 10. Fix lint issues using Ruff.
 11. Produce a quality report.
 
-additional documents
+additional 
