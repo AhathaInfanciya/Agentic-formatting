@@ -338,6 +338,20 @@ subprocess.run(
     check=False,
 )
 
+
+print("\nRunning Ruff...")
+
+ruff_result = subprocess.run(
+    ["ruff", "check", ".", "--fix"],
+    capture_output=True,
+    text=True,
+    check=False,
+)
+
+print(ruff_result.stdout)
+print(ruff_result.stderr)
+
+
 summary_lines = "\n".join(results)
 
 report_content = f"""# Code Quality Report
