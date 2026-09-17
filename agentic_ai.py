@@ -326,29 +326,26 @@ subprocess.run(
     check=False,
 )
 
+
+
 print("\nRunning Ruff...")
 
-subprocess.run(
+ruff_result = subprocess.run(
     [
         "ruff",
         "check",
         ".",
         "--fix",
     ],
-    check=False,
-)
-
-
-print("\nRunning Ruff...")
-
-ruff_result = subprocess.run(
-    ["ruff", "check", ".", "--fix"],
     capture_output=True,
     text=True,
     check=False,
 )
 
+print("Ruff STDOUT:")
 print(ruff_result.stdout)
+
+print("Ruff STDERR:")
 print(ruff_result.stderr)
 
 
