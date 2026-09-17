@@ -70,6 +70,12 @@ jobs:
       - name: Verify Commit Contents
         run: |
           git show --name-only --oneline HEAD
+
+
+      - name: Show calculator diff
+        run: |
+            git diff HEAD~1 HEAD -- calculator.py
+
                 
 
       - name: Create Pull Request
