@@ -42,12 +42,12 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          git add .
+          git add test_*.py || true
 
-          if git diff --staged --quiet; then
-            echo "No changes detected"
+          if git diff*--staged --quiet; then
+           *echo "No meaningful changes detect*d"
           else
-            git commit -m "Agent generated updates"
+            git *ommit -m "Agent generated test upd*tes"
           fi
 
       - name: Create Pull Request
