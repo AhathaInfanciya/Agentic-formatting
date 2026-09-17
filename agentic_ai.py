@@ -191,6 +191,7 @@ Source Code:
         ["pytest", str(test_file), "-v"],
         capture_output=True,
         text=True,
+        check=False
     )
 
     print(pytest_result.stdout)
@@ -229,16 +230,21 @@ Source Code:
 
     print("\nCalculating coverage...")
 
-    subprocess.run(
-        [
-            "pytest",
-            str(test_file),
-            f"--cov={module_name}",
-            "--cov-report=json",
-            "--cov-report=term-missing",
-        ],
-        check=True,
-    )
+    coverage_result = subprocess.run(
+    [
+        "pytest",
+        str(test_file),
+        f"--cov={module_name}",
+        "--cov-report=json",
+        "--cov-report=term-missing",
+    ],
+    capture_output=True,
+    text=True,
+    check=True,
+)
+
+    print(coverage_result.stdout)
+
 
     with open(
         "coverage.json",
@@ -315,6 +321,7 @@ Return ONLY executable Python code.
             ],
             capture_output=True,
             text=True,
+            check=False
         )
 
         print(pytest_retry.stdout)
@@ -347,15 +354,19 @@ Return ONLY executable Python code.
             print("Generated tests failed")
             break
 
-        subprocess.run(
-            [
-                "pytest",
-                str(test_file),
-                f"--cov={module_name}",
-                "--cov-report=json",
-            ],
-            check=True,
-        )
+        coverage_result = subprocess.run(
+    [
+        "pytest",
+        str(test_file),
+        f"--cov={module_name}",
+        "--cov-report=json",
+    ],
+    capture_output=True,
+    text=True,
+    check=True,
+)
+
+        print(coverage_result.stdout)
 
         with open(
             "coverage.json",

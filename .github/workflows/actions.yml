@@ -42,7 +42,6 @@ jobs:
           rm -rf __pycache__
           rm -f .coverage
           rm -f coverage.json
-          rm -f quality_report.md
           rm -f pytest_failure.log
        
 
