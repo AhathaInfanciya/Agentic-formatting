@@ -1,19 +1,18 @@
 import math
 
-import json 
 
-def add(a,b):
+def add(a, b):
     return a + b
 
 
-def subtract(a,b):
+def subtract(a, b):
     if a > b:
         return a - b
     else:
         return a + b
 
 
-def multiply(a,b):
+def multiply(a, b):
     return a * b
 
 
@@ -26,16 +25,13 @@ def divide(a, b):
 
 def square_root(a):
 
-    if a<0:
+    if a < 0:
         return "neagative number has no sqrt value"
     return math.sqrt(a)
 
 
 def cube_root(b):
     return b**3
-
-
-
 
 
 def main():
@@ -49,10 +45,6 @@ def main():
     print("Division:", divide(a, b))
     print("Square Root of first number:", square_root(a))
     print("Cube Root of second number:", cube_root(b))
-
-   
-
-    
 
 
 if __name__ == "__main__":

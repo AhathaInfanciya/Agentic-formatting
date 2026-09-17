@@ -212,55 +212,53 @@ Source Code:
     pytest_result = run_pytest(test_file)
 
     if pytest_result.returncode != 0:
-            print("Generated tests failed")
+        print("Generated tests failed")
 
-            error_output = pytest_result.stdout + "\n" + pytest_result.stderr
-            analysis = analyze_failure(error_output, source_code, module_name)
+        error_output = pytest_result.stdout + "\n" + pytest_result.stderr
+        analysis = analyze_failure(error_output, source_code, module_name)
 
-            if "test bug" in analysis.lower():
-                print("Detected Test Bug. Applying corrected test...")
+        if "test bug" in analysis.lower():
+            print("Detected Test Bug. Applying corrected test...")
 
-                fixed_test_code = extract_fixed_test(analysis)
+            fixed_test_code = extract_fixed_test(analysis)
 
-                if fixed_test_code:
-                    test_file.write_text(
-                        fixed_test_code,
-                        encoding="utf-8",
+            if fixed_test_code:
+                test_file.write_text(
+                    fixed_test_code,
+                    encoding="utf-8",
+                )
+
+                pytest_result = run_pytest(test_file)
+
+                if pytest_result.returncode == 0:
+                    print("Regenerated test passed")
+
+                    print("\nCalculating coverage...")
+                    coverage, missing_lines = run_coverage(
+                        test_file,
+                        module_name,
+                        term_missing=True,
                     )
 
-                    pytest_result = run_pytest(test_file)
+                    retry_count = 0
+                    status = None
 
-                    if pytest_result.returncode == 0:
-                        print("Regenerated test passed")
+                    # continue normal flow
+                else:
+                    print("Corrected test still failed")
 
-                        print("\nCalculating coverage...")
-                        coverage, missing_lines = run_coverage(
-                            test_file,
-                            module_name,
-                            term_missing=True,
-                        )
+        print("\nFailure Analysis:")
+        print(analysis)
 
-                        retry_count = 0
-                        status = None
+        write_failure_log(
+            module_name,
+            error_output,
+            analysis,
+        )
 
-                        # continue normal flow
-                    else:
-                        print("Corrected test still failed")
+        results.append(f"{python_file.name}: FAIL")
 
-            print("\nFailure Analysis:")
-            print(analysis)
-
-            write_failure_log(
-                module_name,
-                error_output,
-                analysis,
-            )
-
-            results.append(
-                f"{python_file.name}: FAIL"
-            )
-
-            continue
+        continue
 
     print("\nCalculating coverage...")
     coverage, missing_lines = run_coverage(test_file, module_name, term_missing=True)
@@ -349,7 +347,9 @@ print("\nRunning Black...")
 subprocess.run(["black", "."], check=False)
 
 print("\nRunning Ruff...")
-subprocess.run(["ruff", "check", ".", "--fix"], capture_output=True, text=True, check=False)
+subprocess.run(
+    ["ruff", "check", ".", "--fix"], capture_output=True, text=True, check=False
+)
 
 summary_lines = "\n".join(results)
 report_content = f"""# Code Quality Report
