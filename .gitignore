@@ -1,0 +1,24 @@
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Test cache
+.pytest_cache/
+
+# Ruff cache
+.ruff_cache/
+
+# Coverage files
+.coverage
+coverage.json
+
+# Generated reports
+quality_report.md
+pytest_failure.log
+
+# VS Code
+.vscode/
+``

@@ -1,0 +1,69 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.16, pytest-9.1.1, pluggy-1.6.0 -- /opt/hostedtoolcache/Python/3.11.16/x64/bin/python
+cachedir: .pytest_cache
+rootdir: /home/runner/work/Agentic-formatting/Agentic-formatting
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 37 items
+
+test_calculator.py::test_add_positive_numbers PASSED                     [  2%]
+test_calculator.py::test_add_negative_numbers PASSED                     [  5%]
+test_calculator.py::test_add_positive_and_negative PASSED                [  8%]
+test_calculator.py::test_add_zero PASSED                                 [ 10%]
+test_calculator.py::test_add_floats PASSED                               [ 13%]
+test_calculator.py::test_subtract_a_greater_than_b PASSED                [ 16%]
+test_calculator.py::test_subtract_a_less_than_b PASSED                   [ 18%]
+test_calculator.py::test_subtract_a_equal_b PASSED                       [ 21%]
+test_calculator.py::test_subtract_negative_numbers PASSED                [ 24%]
+test_calculator.py::test_subtract_zero_case PASSED                       [ 27%]
+test_calculator.py::test_multiply_positive_numbers PASSED                [ 29%]
+test_calculator.py::test_multiply_negative_numbers PASSED                [ 32%]
+test_calculator.py::test_multiply_positive_and_negative PASSED           [ 35%]
+test_calculator.py::test_multiply_by_zero PASSED                         [ 37%]
+test_calculator.py::test_multiply_floats PASSED                          [ 40%]
+test_calculator.py::test_divide_positive_numbers PASSED                  [ 43%]
+test_calculator.py::test_divide_negative_numbers PASSED                  [ 45%]
+test_calculator.py::test_divide_positive_and_negative PASSED             [ 48%]
+test_calculator.py::test_divide_by_zero_returns_message PASSED           [ 51%]
+test_calculator.py::test_divide_zero_by_number PASSED                    [ 54%]
+test_calculator.py::test_divide_floats PASSED                            [ 56%]
+test_calculator.py::test_square_root_positive_number PASSED              [ 59%]
+test_calculator.py::test_square_root_zero PASSED                         [ 62%]
+test_calculator.py::test_square_root_negative_number PASSED              [ 64%]
+test_calculator.py::test_square_root_non_perfect_square PASSED           [ 67%]
+test_calculator.py::test_square_root_float_input PASSED                  [ 70%]
+test_calculator.py::test_cube_root_positive_number PASSED                [ 72%]
+test_calculator.py::test_cube_root_negative_number PASSED                [ 75%]
+test_calculator.py::test_cube_root_zero PASSED                           [ 78%]
+test_calculator.py::test_cube_root_float_input PASSED                    [ 81%]
+test_calculator.py::test_cube_root_one PASSED                            [ 83%]
+test_calculator.py::test_add_with_invalid_type_raises_typeerror PASSED   [ 86%]
+test_calculator.py::test_subtract_with_invalid_type_raises_typeerror PASSED [ 89%]
+test_calculator.py::test_multiply_with_invalid_type_raises_typeerror FAILED [ 91%]
+test_calculator.py::test_divide_with_invalid_type_raises_typeerror PASSED [ 94%]
+test_calculator.py::test_square_root_with_invalid_type_raises_typeerror PASSED [ 97%]
+test_calculator.py::test_cube_root_with_invalid_type_raises_typeerror PASSED [100%]
+
+=================================== FAILURES ===================================
+_______________ test_multiply_with_invalid_type_raises_typeerror _______________
+
+    def test_multiply_with_invalid_type_raises_typeerror():
+>       with pytest.raises(TypeError):
+E       Failed: DID NOT RAISE TypeError
+
+test_calculator.py:158: Failed
+=========================== short test summary info ============================
+FAILED test_calculator.py::test_multiply_with_invalid_type_raises_typeerror - Failed: DID NOT RAISE TypeError
+========================= 1 failed, 36 passed in 0.06s =========================
+
+
+
+Classification: Code Bug
+Root Cause: The `multiply` function does not perform any type validation. Since Python allows `int * str` (e.g., `3 * "abc"` returns `"abcabcabc"`) and `float * str` behaves similarly in many test scenarios, calling `multiply` with an invalid type (such as a string) does not raise a `TypeError` as expected, unlike `add`, `subtract`, and `divide`, which rely on arithmetic operators that naturally raise `TypeError` for mismatched types (e.g., `int + str`). This inconsistency causes the test expecting a `TypeError` to fail because `multiply` silently succeeds with string repetition instead of raising an error.
+
+Suggested Fix: Add explicit type checking in the `multiply` function to ensure both arguments are numeric (int or float) before performing multiplication, raising a `TypeError` otherwise. For example:
+
+```python
+def multiply(a, b):
+    if not isinstance(a, (int, float)) or not isinstance(b, (int, float)):
+        raise TypeError("Both arguments must be numbers")
+    return a * b
