@@ -9,8 +9,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class ConfigurationError(Exception):
     pass
+
 
 api_key = os.getenv("ANTHROPIC_API_KEY")
 
@@ -18,13 +20,10 @@ if not api_key:
     raise ConfigurationError("ANTHROPIC_API_KEY not found")
 
 
-
 client = Anthropic(api_key=api_key)
 
 COVERAGE_THRESHOLD = 80.0
 MAX_RETRIES = 3
-
-
 
 
 def clean_llm_code(text):
