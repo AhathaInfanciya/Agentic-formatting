@@ -342,6 +342,9 @@ ruff_result = subprocess.run(
     check=False,
 )
 
+print("\nCalculator after Ruff:")
+print(Path("calculator.py").read_text())
+
 print("Ruff STDOUT:")
 print(ruff_result.stdout)
 
