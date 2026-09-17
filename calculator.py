@@ -25,6 +25,9 @@ def divide(a, b):
 
 
 def square_root(a):
+
+    if a<0:
+        return "neagative number has no sqrt value"
     return math.sqrt(a)
 
 
