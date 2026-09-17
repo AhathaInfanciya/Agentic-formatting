@@ -342,14 +342,7 @@ ruff_result = subprocess.run(
     check=False,
 )
 
-print("\nCalculator after Ruff:")
-print(Path("calculator.py").read_text())
 
-print("Ruff STDOUT:")
-print(ruff_result.stdout)
-
-print("Ruff STDERR:")
-print(ruff_result.stderr)
 
 
 summary_lines = "\n".join(results)
