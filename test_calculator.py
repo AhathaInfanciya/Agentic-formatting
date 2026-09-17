@@ -1,5 +1,7 @@
-import pytest
 import math
+
+import pytest
+
 import calculator as calc
 
 
