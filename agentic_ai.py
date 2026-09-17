@@ -66,6 +66,34 @@ def call_claude(prompt):
     return clean_llm_code(output)
 
 
+def analyze_failure(error_output, source_code):
+    prompt = f"""
+The generated test failed.
+
+Error:
+{error_output}
+
+Source Code:
+{source_code}
+
+Determine whether the failure is:
+
+1. Code Bug
+2. Test Bug
+3. Requirement Ambiguity
+
+Provide:
+
+Classification:
+Root Cause:
+Suggested Fix:
+
+Return plain text only.
+"""
+
+    return call_claude(prompt)
+
+
 python_files = []
 
 for python_file in Path(".").glob("*.py"):
@@ -168,19 +196,36 @@ Source Code:
     print(pytest_result.stdout)
 
     if pytest_result.returncode != 0:
-        print("Generated tests failed")
+     print("Generated tests failed")
 
-        error_output = pytest_result.stdout + "\n" + pytest_result.stderr
+     error_output = (
+        pytest_result.stdout
+        + "\n"
+        + pytest_result.stderr
+    )
 
-        with open(
-            "pytest_failure.log",
-            "w",
-            encoding="utf-8",
-        ) as f:
-            f.write(error_output)
+     analysis = analyze_failure(
+        error_output,
+        source_code,
+    )
 
-        results.append(f"{python_file.name}: FAIL | Execution Error")
-        continue
+     print("\nFailure Analysis:")
+     print(analysis)
+
+     with open(
+        f"pytest_failure_{module_name}.log",
+        "w",
+        encoding="utf-8",
+    ) as f:
+        f.write(error_output)
+        f.write("\n\n")
+        f.write(analysis)
+
+     results.append(
+        f"{python_file.name}: FAIL"
+    )
+
+     continue
 
     print("\nCalculating coverage...")
 
@@ -275,12 +320,28 @@ Return ONLY executable Python code.
         print(pytest_retry.stdout)
 
         if pytest_retry.returncode != 0:
+            error_output = (
+                pytest_retry.stdout
+                + "\n"
+                + pytest_retry.stderr
+            )
+
+            analysis = analyze_failure(
+                error_output,
+                source_code,
+            )
+
+            print("\nFailure Analysis:")
+            print(analysis)
+
             with open(
-                "pytest_failure.log",
+                f"pytest_failure_{module_name}.log",
                 "w",
                 encoding="utf-8",
             ) as f:
-                f.write(pytest_retry.stdout + "\n" + pytest_retry.stderr)
+                f.write(error_output)
+                f.write("\n\n")
+                f.write(analysis)
 
             status = "FAIL"
             print("Generated tests failed")
