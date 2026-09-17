@@ -46,7 +46,10 @@ jobs:
           rm -f pytest_failure.log
        
 
-
+      - name: Show Git Status
+        run: |
+          git status
+          git diff --name-only
 
 
 
@@ -63,10 +66,7 @@ jobs:
           else
             git commit -m "Agent generated test updates"
           fi
-      - name: Show Git Status
-        run: |
-          git status
-          git diff --name-only
+      
 
           
 
