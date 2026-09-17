@@ -68,9 +68,9 @@ jobs:
           fi
       
       - name: Verify Commit Contents
-  run: |
-    git show --name-only --oneline HEAD
-          
+        run: |
+          git show --name-only --oneline HEAD
+                
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
