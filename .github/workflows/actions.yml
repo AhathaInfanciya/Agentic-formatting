@@ -48,6 +48,9 @@ jobs:
 
 
 
+
+
+
       - name: Commit Generated Changes
         run: |
           git config --global user.name "github-actions"
@@ -60,7 +63,10 @@ jobs:
           else
             git commit -m "Agent generated test updates"
           fi
-
+      - name: Show Git Status
+        run: |
+          git status
+          git diff --name-only
 
           
 
