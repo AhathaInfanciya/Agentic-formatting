@@ -37,6 +37,17 @@ jobs:
         run: |
           python agentic_ai.py
 
+      - name: Remove Generated Artifacts
+        run: |
+          rm -rf __pycache__
+          rm -f .coverage
+          rm -f coverage.json
+          rm -f quality_report.md
+          rm -f pytest_failure.log
+       
+
+
+
       - name: Commit Generated Changes
         run: |
           git config --global user.name "github-actions"
@@ -49,6 +60,9 @@ jobs:
           else
             git commit -m "Agent generated test updates"
           fi
+
+
+          
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v7
