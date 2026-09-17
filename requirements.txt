@@ -1,0 +1,7 @@
+anthropic
+python-dotenv
+pytest
+pytest-cov
+black
+ruff
+coverage
