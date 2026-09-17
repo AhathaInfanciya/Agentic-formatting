@@ -3,5 +3,5 @@ def employee():
     age=int(input("enter age"))
     print(name,age)
 
-
-employee()
+if __name__ == "__main__":
+    employee()
